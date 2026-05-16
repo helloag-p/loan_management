@@ -16,9 +16,33 @@ const seedUsers = async () => {
 
     await User.deleteMany()
 
-    const password =
+    const adminPassword =
       await bcrypt.hash(
         "Admin@123",
+        10
+      )
+
+    const sanctionPassword =
+      await bcrypt.hash(
+        "Sanction@123",
+        10
+      )
+
+    const disbursementPassword =
+      await bcrypt.hash(
+        "Disbursement@123",
+        10
+      )
+
+    const collectionPassword =
+      await bcrypt.hash(
+        "Collection@123",
+        10
+      )
+
+    const borrowerPassword =
+      await bcrypt.hash(
+        "Borrower@123",
         10
       )
 
@@ -26,36 +50,36 @@ const seedUsers = async () => {
 
       {
         name: "Admin",
-        email: "admin@test.com",
-        password,
+        email: "admin@capitalflow.com",
+        password: adminPassword,
         role: "ADMIN"
       },
 
       {
-        name: "Sanction",
-        email: "sanction@test.com",
-        password,
+        name: "Sanction Executive",
+        email: "sanction@capitalflow.com",
+        password: sanctionPassword,
         role: "SANCTION"
       },
 
       {
-        name: "Disbursement",
-        email: "disbursement@test.com",
-        password,
+        name: "Disbursement Executive",
+        email: "disbursement@capitalflow.com",
+        password: disbursementPassword,
         role: "DISBURSEMENT"
       },
 
       {
-        name: "Collection",
-        email: "collection@test.com",
-        password,
+        name: "Collection Executive",
+        email: "collection@capitalflow.com",
+        password: collectionPassword,
         role: "COLLECTION"
       },
 
       {
         name: "Borrower",
-        email: "borrower@test.com",
-        password,
+        email: "borrower@capitalflow.com",
+        password: borrowerPassword,
         role: "BORROWER"
       }
     ]
@@ -63,7 +87,7 @@ const seedUsers = async () => {
     await User.insertMany(users)
 
     console.log(
-      "Users Seeded"
+      "Capital Flow users seeded successfully"
     )
 
     process.exit()

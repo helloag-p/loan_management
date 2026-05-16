@@ -1,6 +1,19 @@
-# Loan Management System
+# Capital Flow - Loan Management System
 
-A full-stack Loan Management System built using MERN Stack, Next.js, TypeScript, MongoDB, JWT Authentication, and Role-Based Access Control.
+A full-stack Loan Management System built using MERN Stack, Next.js, TypeScript, MongoDB, JWT Authentication, and Role-Based Access Control (RBAC).
+
+This platform simulates the complete lifecycle of a loan application from borrower onboarding to loan closure through multiple operational stages.
+
+---
+
+# Project Overview
+
+Capital Flow is a lending platform where:
+
+- Borrowers can apply for loans
+- Internal teams manage loans through different stages
+- Role-based dashboards restrict access to authorized modules
+- Payments are tracked until the loan is fully closed
 
 ---
 
@@ -10,96 +23,277 @@ A full-stack Loan Management System built using MERN Stack, Next.js, TypeScript,
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
+- Axios
+- React Hot Toast
 
 ## Backend
 - Node.js
 - Express.js
 - TypeScript
+- JWT Authentication
+- bcryptjs
+- Multer
 
 ## Database
 - MongoDB
 - Mongoose
 
-## Authentication
-- JWT
-- bcrypt
-
 ---
 
-# Features
+# Main Features
 
-## Borrower Portal
-- User Signup/Login
-- BRE Validation
+# Borrower Portal
+
+- User Registration & Login
+- JWT Authentication
+- BRE (Business Rule Engine) Validation
 - Salary Slip Upload
 - Loan Application
-- Loan Tracking
+- Live Loan Calculation
+- Loan Status Tracking
 
-## Operations Dashboard
-- Sales Module
-- Sanction Module
-- Disbursement Module
-- Collection Module
+# Operations Dashboard
 
-## RBAC
-- Admin
-- Sales
-- Sanction
-- Disbursement
-- Collection
-- Borrower
+## Sales Module
+- Tracks registered users
+- Lead management before application stage
 
-## Loan Lifecycle
-APPLIED → SANCTIONED → DISBURSED → CLOSED
+## Sanction Module
+- Reviews loan applications
+- Approves or rejects applications
 
----
+## Disbursement Module
+- Handles sanctioned loans
+- Marks loans as disbursed
 
-# BRE Rules
-
-Loan application is rejected if:
-
-- Age is not between 23 and 50
-- Salary is below ₹25,000
-- Invalid PAN format
-- Employment mode is UNEMPLOYED
+## Collection Module
+- Records borrower repayments
+- Tracks outstanding balance
+- Auto closes loan after full repayment
 
 ---
 
-# Loan Calculation
+# Role-Based Access Control (RBAC)
+
+The system supports the following roles:
+
+- ADMIN
+- SALES
+- SANCTION
+- DISBURSEMENT
+- COLLECTION
+- BORROWER
+
+Access is enforced on:
+- Frontend routes
+- Backend APIs
+
+---
+
+# Borrower Flow
+
+## Step 1 - Authentication
+- User Signup
+- User Login
+- JWT Token Generation
+- Protected Routes
+
+---
+
+## Step 2 - BRE Validation
+
+The borrower fills:
+- Full Name
+- PAN Number
+- DOB
+- Monthly Salary
+- Employment Mode
+
+The application is rejected if:
+
+| Rule | Condition |
+|---|---|
+| Age | Not between 23 and 50 |
+| Salary | Below ₹25,000 |
+| PAN | Invalid PAN format |
+| Employment | UNEMPLOYED |
+
+---
+
+## Step 3 - Salary Slip Upload
+
+Supported Files:
+- JPG
+- PNG
+- PDF
+
+Validation:
+- Maximum 5 MB
+
+---
+
+## Step 4 - Loan Configuration
+
+Borrower selects:
+- Loan Amount
+- Tenure
+
+Interest Rate:
+- Fixed at 12% p.a.
 
 Simple Interest Formula:
 
+```text
 SI = (P × R × T) / (365 × 100)
+```
 
 Where:
 - P = Principal
 - R = Interest Rate
-- T = Tenure in days
+- T = Tenure (days)
 
-Interest Rate = 12% p.a.
+Total Repayment:
+
+```text
+Total = Principal + Interest
+```
+
+---
+
+# Loan Lifecycle
+
+```text
+APPLIED
+   ↓
+SANCTIONED
+   ↓
+DISBURSED
+   ↓
+CLOSED
+```
+
+---
+
+# Operational Flow
+
+## Sanction Team
+- Reviews loan application
+- Approves or rejects loan
+
+---
+
+## Disbursement Team
+- Releases funds
+- Changes loan status to DISBURSED
+
+---
+
+## Collection Team
+- Records payments
+- Stores:
+  - UTR Number
+  - Payment Amount
+  - Payment Date
+
+Rules:
+- UTR must be unique
+- Payment cannot exceed outstanding amount
+
+When outstanding amount becomes ₹0:
+- Loan automatically changes to CLOSED
 
 ---
 
 # Folder Structure
 
 ```bash
-frontend/
-backend/
+Capital-Flow-LMS/
+│
+├── backend/
+│   │
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── seed/
+│   │   ├── utils/
+│   │   ├── app.ts
+│   │   └── server.ts
+│   │
+│   ├── uploads/
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── .env
+│
+├── frontend/
+│   │
+│   ├── app/
+│   │   ├── dashboard/
+│   │   ├── login/
+│   │   ├── register/
+│   │   └── borrower/
+│   │
+│   ├── components/
+│   ├── services/
+│   ├── utils/
+│   ├── middleware.ts
+│   ├── package.json
+│   └── tailwind.config.ts
+│
+├── README.md
+└── .env.example
 ```
+
+---
+
+# API Modules
+
+## Authentication
+- Register
+- Login
+
+## Applications
+- Create Application
+- BRE Validation
+
+## Uploads
+- Salary Slip Upload
+
+## Loans
+- Apply Loan
+- Approve Loan
+- Disburse Loan
+- Fetch Loans
+
+## Payments
+- Record Payment
+- Auto Close Loan
+
+---
+
+# Database Collections
+
+- users
+- applications
+- loans
+- payments
 
 ---
 
 # Setup Instructions
 
-## 1. Clone Repository
+# 1. Clone Repository
 
 ```bash
-git clone <repo-link>
+git clone <repository-link>
 ```
 
 ---
 
-# Backend Setup
+# 2. Backend Setup
 
 ```bash
 cd backend
@@ -110,26 +304,32 @@ Create `.env`
 
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_url
+MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_secret
 ```
 
-Run backend
+Run backend server:
 
 ```bash
 npm run dev
 ```
 
+Backend runs on:
+
+```bash
+http://localhost:5000
+```
+
 ---
 
-# Frontend Setup
+# 3. Frontend Setup
 
 ```bash
 cd frontend
 npm install
 ```
 
-Run frontend
+Run frontend:
 
 ```bash
 npm run dev
@@ -141,65 +341,129 @@ Frontend runs on:
 http://localhost:3000
 ```
 
-Backend runs on:
+---
 
-```bash
-http://localhost:5000
+# Seeded Test Credentials
+
+## Admin
+
+```text
+Email: admin@capitalflow.com
+Password: Admin@123
+```
+
+## Sales Executive
+
+```text
+Email: sales@capitalflow.com
+Password: Sales@123
+```
+
+## Sanction Executive
+
+```text
+Email: sanction@capitalflow.com
+Password: Sanction@123
+```
+
+## Disbursement Executive
+
+```text
+Email: disbursement@capitalflow.com
+Password: Disbursement@123
+```
+
+## Collection Executive
+
+```text
+Email: collection@capitalflow.com
+Password: Collection@123
+```
+
+## Borrower
+
+```text
+Email: borrower@capitalflow.com
+Password: Borrower@123
 ```
 
 ---
 
-# Test Credentials
+# Complete Testing Flow
 
-## Admin
-Email: admin@gmail.com
-Password: admin123
-
-## Sales
-Email: sales@gmail.com
-Password: sales123
-
-## Sanction
-Email: sanction@gmail.com
-Password: sanction123
-
-## Disbursement
-Email: disbursement@gmail.com
-Password: disbursement123
-
-## Collection
-Email: collection@gmail.com
-Password: collection123
-
-## Borrower
-Email: borrower@gmail.com
-Password: borrower123
+## Borrower Side
+1. Register/Login
+2. Fill personal details
+3. BRE validation passes
+4. Upload salary slip
+5. Configure loan
+6. Apply loan
 
 ---
 
-# Complete Flow
-
-1. Borrower registers/logins
-2. BRE validation runs
-3. Borrower uploads salary slip
-4. Borrower applies for loan
-5. Sanction team approves/rejects
-6. Disbursement team disburses loan
-7. Collection team records payments
-8. Loan auto closes after full repayment
+## Sanction Side
+1. Login as SANCTION role
+2. Review applied loans
+3. Approve or reject application
 
 ---
 
-# API Modules
+## Disbursement Side
+1. Login as DISBURSEMENT role
+2. View sanctioned loans
+3. Mark loan as disbursed
 
-- Authentication
-- Applications
-- Loan Management
-- Salary Slip Upload
-- Payments
+---
+
+## Collection Side
+1. Login as COLLECTION role
+2. Record payments
+3. Track outstanding balance
+4. Loan auto closes after repayment completion
+
+---
+
+# Security Features
+
+- JWT Authentication
+- Password Hashing using bcrypt
+- Protected APIs
+- RBAC Middleware
+- Route Protection
+- File Upload Validation
+
+---
+
+# Future Improvements
+
+- EMI Schedule Generation
+- Email Notifications
+- Razorpay Integration
+- Dashboard Analytics
+- Credit Score Integration
+- AWS S3 File Uploads
+
+---
+
+# Demo Video
+
+Include:
+- BRE failure case
+- BRE success case
+- Salary slip upload
+- Loan approval flow
+- Disbursement flow
+- Collection flow
+- Auto loan closure
 
 ---
 
 # Author
 
 Parv Agarwal
+
+GitHub:
+https://github.com/helloag-
+
+LinkedIn:
+https://linkedin.com/in/parv-agarwal-09b042215
