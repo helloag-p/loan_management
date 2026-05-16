@@ -78,7 +78,6 @@ Capital Flow is a lending platform where:
 The system supports the following roles:
 
 - ADMIN
-- SALES
 - SANCTION
 - DISBURSEMENT
 - COLLECTION
@@ -352,13 +351,6 @@ Email: admin@capitalflow.com
 Password: Admin@123
 ```
 
-## Sales Executive
-
-```text
-Email: sales@capitalflow.com
-Password: Sales@123
-```
-
 ## Sanction Executive
 
 ```text
@@ -463,7 +455,7 @@ Include:
 Parv Agarwal
 
 GitHub:
-https://github.com/helloag-
+https://github.com/helloag-p
 
 LinkedIn:
 https://linkedin.com/in/parv-agarwal-09b042215
